@@ -1,264 +1,171 @@
-let noButtonClickCount = 0; // Contador para el botón "No"
-let noButtonState = 0; // Estado actual del botón "No"
+/* --- GLOBAL THEME & VISITS --- */
+(function () {
+    // Solo contar si estamos en el index
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/') || window.location.pathname.indexOf('.html') === -1) {
+        if (!sessionStorage.getItem('countedView')) {
+            let views = localStorage.getItem('pageViews') || 0;
+            localStorage.setItem('pageViews', parseInt(views) + 1);
+            sessionStorage.setItem('countedView', '1');
+        }
+    }
+    // Leer tema
+    const themeStr = localStorage.getItem('selectedTheme');
+    if (themeStr) {
+        try {
+            const theme = JSON.parse(themeStr);
+            for (let key in theme) {
+                document.documentElement.style.setProperty(key, theme[key]);
+            }
+        } catch (e) { }
+    }
+})();
 
-// Mostrar el gif inicial
-document.getElementById('gifContainer').style.display = 'block';
+document.addEventListener('DOMContentLoaded', () => {
+    const loginBtn = document.getElementById('loginBtn');
+    const modal = document.getElementById('loginModal');
+    const closeBtn = document.getElementById('closeModal');
+    const loginForm = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
 
-document.getElementById('siBtn').addEventListener('click', function() {
-    // Ocultar el gif triste y mostrar el gif feliz
-    document.getElementById('sadGifContainer').style.display = 'none';
-    document.getElementById('sadGifContainer1').style.display = 'none';
-    document.getElementById('sadGifContainer2').style.display = 'none';
-    document.getElementById('gifContainer').style.display = 'none';
-    document.getElementById('happyGifContainer').style.display = 'block';
+    // Abre el modal
+    loginBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.classList.add('active');
+        errorMsg.style.display = 'none';
+        loginForm.reset();
+    });
 
-    // Ocultar los botones "Pregunta Sí" y "No "
-    document.getElementById('question').style.display = 'none';
-    document.getElementById('siBtn').style.display = 'none';
-    document.body.classList.add('bg-green');
-    document.getElementById('noBtn').style.display = 'none';
+    // Cierra el modal
+    closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+    });
 
-    // Mostrar el mensaje específico
-    document.getElementById('messageContainer').style.display = 'block';
-    document.getElementById('messageContainer').innerHTML = '¡Al ojo sabia que dirias que si, Mi peque';
+    // Cierra modal al hacer clic afuera
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
 
-    // Mostrar otro gif después de 3 segundos
-    setTimeout(function() {
-        document.getElementById('happyGifContainer').style.display = 'none';
-        document.getElementById('happyGifContainer2').style.display = 'block';
-    }, 1000);
+    // Manejar el login
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
 
-    setTimeout(function() {
-        document.getElementById('happyGifContainer2').style.display = 'none';
-        document.getElementById('happyGifContainer3').style.display = 'block';
-    }, 2000);
-    setTimeout(function() {
-        document.getElementById('happyGifContainer3').style.display = 'none';
-        document.getElementById('happyGifContainer4').style.display = 'block';
-    }, 3000);
-  
-});
+        // Validacion estetica
+        if (user === '72049325' && pass === '280624') {
+            // Guarda estado en localStorage
+            localStorage.setItem('isAdmin', 'true');
+            // Redirige al panel
+            window.location.href = 'admin.html';
+        } else {
+            errorMsg.style.display = 'block';
+        }
+    });
 
+    // Cerrar modal de tareas
+    const tasksModal = document.getElementById('tasksModal');
+    const closeTasksBtn = document.getElementById('closeTasksModal');
 
-document.getElementById('noBtn').addEventListener('click', function() {
-    switch (noButtonState) {
-        case 0:
-            // Primera vez haciendo clic en "No"
-            document.getElementById('happyGifContainer').style.display = 'none';
-            document.getElementById('gifContainer').style.display = 'none';
-            document.getElementById('sadGifContainer').style.display = 'block';
+    if (closeTasksBtn && tasksModal) {
+        closeTasksBtn.addEventListener('click', () => {
+            tasksModal.classList.remove('active');
+        });
 
-            // Modificar el botón "No"
-            document.getElementById('noBtn').innerHTML = '¿Como que no?🥺¿Estás segura?';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-          
-            
-            document.getElementById('siBtn').style.fontSize = '40px';
-            document.getElementById('siBtn').style.padding = '20px 40px';
-       
-            
-           
+        tasksModal.addEventListener('click', (e) => {
+            if (e.target === tasksModal) {
+                tasksModal.classList.remove('active');
+            }
+        });
+    }
 
-        
-            noButtonClickCount++;
-            noButtonState++;
-            break;
+    // Modal Sugerencias
+    const sugFab = document.getElementById('sugerenciaFab');
+    const sugModal = document.getElementById('sugModal');
+    const closeSug = document.getElementById('closeSugModal');
+    const sugForm = document.getElementById('sugForm');
 
-        case 1:
-            // Segunda vez haciendo clic en "No"
+    if (sugFab && sugModal) {
+        sugFab.addEventListener('click', () => sugModal.classList.add('active'));
+        closeSug.addEventListener('click', () => sugModal.classList.remove('active'));
+        sugForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nom = document.getElementById('sugNombre').value;
+            const msj = document.getElementById('sugMensaje').value;
 
-            document.getElementById('noBtn').innerHTML = '¡Di que si CHE TU ARE?!';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-            document.getElementById('sadGifContainer').style.display = 'none';
-            document.getElementById('sadGifContainer2').style.display = 'block';
+            let arr = JSON.parse(localStorage.getItem('sugerencias') || '[]');
+            arr.push({ nombre: nom, mensaje: msj, fecha: new Date().toLocaleDateString() });
+            localStorage.setItem('sugerencias', JSON.stringify(arr));
 
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '50px';
-            document.getElementById('siBtn').style.padding = '30px 50px';
-        
-            noButtonState++;
-            break;
-
-        case 2:
-           
-            document.getElementById('noBtn').innerHTML = 'Mmm.....segura de verdad?,¿chopechocho?';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-            document.getElementById('sadGifContainer').style.display = 'none';
-            document.getElementById('sadGifContainer2').style.display = 'none';
-            document.getElementById('sadGifContainer1').style.display = 'block';
-
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '60px';
-            document.getElementById('siBtn').style.padding = '40px 60px';
-        
-            noButtonState++;
-            break;
-        
-        case 3:
-           
-            document.getElementById('noBtn').innerHTML = '¿Di que shiii amochito?';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '70px';
-            document.getElementById('siBtn').style.padding = '50px 70px';
-        
-            noButtonState++;
-            break;
-        case 4:
-           
-            document.getElementById('noBtn').innerHTML = 'Di si poi favoi 🙏🏻?';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '80px';
-            document.getElementById('siBtn').style.padding = '60px 80px';
-         
-            noButtonState++;
-            break;
-        case 5:
-           
-            document.getElementById('noBtn').innerHTML = 'piensalo ehh';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '90px';
-            document.getElementById('siBtn').style.padding = '70px 90px';
-
-            noButtonState++;
-            break;
-        case 6:
-           
-            document.getElementById('noBtn').innerHTML = 'Si dices que no, no hay gomitas';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '100px';
-            document.getElementById('siBtn').style.padding = '80px 100px';
-            
-            noButtonState++;
-            break;
-        case 7:
-           
-            document.getElementById('noBtn').innerHTML = 'tite (se pone a llorar 😭)';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '120px';
-            document.getElementById('siBtn').style.padding = '90px 120px';
-  
-            noButtonState++;
-            break;
-        case 8:
-           
-            document.getElementById('noBtn').innerHTML = 'ya pue mi peque di shiii';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            document.getElementById('siBtn').style.fontSize = '140px';
-            document.getElementById('siBtn').style.padding = '100px 140px';
-       
-            noButtonState++;
-            break;
-
-        case 9:
-           
-            document.getElementById('noBtn').innerHTML = 'Estaré muy muy muy muy tite.';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '160px';
-            document.getElementById('siBtn').style.padding = '110px 160px';
-          
-            noButtonState++;
-            break;
-
-        case 10:
-           
-            document.getElementById('noBtn').innerHTML = 'Vale, ya dejaré de preguntar...';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-         
-            document.getElementById('siBtn').style.fontSize = '180px';
-            document.getElementById('siBtn').style.padding = '120px 180px';
-    
-            noButtonState++;
-            break;
-        case 11:
-           
-            document.getElementById('noBtn').innerHTML = 'Es broma, POR FAVOR DI SÍ';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            document.getElementById('siBtn').style.fontSize = '200px';
-            document.getElementById('siBtn').style.padding = '130px 200px';
-            
-            noButtonState++;
-            break;
-        
-        case 12:
-           
-            document.getElementById('noBtn').innerHTML = 'Estaré muy muy muy muy muy tite.';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '220px';
-            document.getElementById('siBtn').style.padding = '140px 220px';
-    
-            noButtonState++;
-            break;
-        
-        case 13:
-           
-            document.getElementById('noBtn').innerHTML = 'Estás rompiendo mi corazon de pollo :(';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            document.getElementById('siBtn').style.fontSize = '240px';
-            document.getElementById('siBtn').style.padding = '150px 240px';
-         
-            noButtonState++;
-            break;
-        
-        case 14:
-           
-            document.getElementById('noBtn').innerHTML = 'ahhhhhh... ya di que si';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '260px';
-            document.getElementById('siBtn').style.padding = '160px 260px';
-            
-            noButtonState++;
-            break;
-        
-        case 15:
-           
-            document.getElementById('noBtn').innerHTML = 'Anda Shiiiiiiiiiiiii';
-            document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-
-            // Hacer que el botón "Sí" crezca
-            document.getElementById('siBtn').style.fontSize = '280px';
-            document.getElementById('siBtn').style.padding = '170px 280px';
-          
-            noButtonState++;
-            break;
-        
-     
-        case 16:
-                document.getElementById('noBtn').innerHTML = 'por favooooooo';
-                document.getElementById('noBtn').style.backgroundColor = '#F1330A';
-              
-                document.getElementById('sadGifContainer').style.display = 'none';
-                document.getElementById('sadGifContainer1').style.display = 'none';
-                document.getElementById('sadGifContainer2').style.display = 'none';
-                document.getElementById('gifContainer').style.display = 'block';
-                document.getElementById('happyGifContainer').style.display = 'none';
-                // Vuelve al estado 0
-                noButtonState = 0;
-                break;
-        
-
-        default:
-            // Por si acaso, maneja cualquier otro caso aquí
-            break;
+            alert('¡Sugerencia enviada correctamente!');
+            sugForm.reset();
+            sugModal.classList.remove('active');
+        });
     }
 });
 
+// Datos de ejemplo para las tareas de cada semana
+const datosSemanas = {
+    'Semana 1': [
+        { tarea: 'Mapa Conceptual sobre Fundamentos', enlace: 'https://canva.link/9ntavn49omp1ov3' },
+        { tarea: 'Documento PDF de Introducción', enlace: '#' }
+    ],
+    'Semana 2': [
+        { tarea: 'Infografía de Estructuras', enlace: 'https://www.canva.com/' },
+        { tarea: 'Práctica Inicial', enlace: '#' }
+    ],
+    'Semana 3': [
+        { tarea: 'Presentación de Avance', enlace: 'https://www.canva.com/' }
+    ],
+    'Semana 4': [
+        { tarea: 'Guía visual de Estilos', enlace: 'https://www.canva.com/' },
+        { tarea: 'Borrador del Proyecto', enlace: '#' }
+    ],
+    'Semana 5': [
+        { tarea: 'Pruebas de Funcionalidad', enlace: 'https://www.canva.com/' }
+    ],
+    'Semana 6': [
+        { tarea: 'Reporte de Errores', enlace: 'https://www.canva.com/' }
+    ],
+    'Semana 7': [
+        { tarea: 'Optimización Final', enlace: 'https://www.canva.com/' }
+    ],
+    'Semana 8': [
+        { tarea: 'Presentación Final del Proyecto', enlace: 'https://www.canva.com/' }
+    ]
+};
+
+// Funcion global para abrir las semanas
+window.abrirTareas = function (semanaName) {
+    const modal = document.getElementById('tasksModal');
+    const title = document.getElementById('tasksModalTitle');
+    const bodyContainer = document.getElementById('tasksModalBody');
+
+    if (modal && title && bodyContainer) {
+        title.innerText = "Trabajos de la " + semanaName;
+
+        let htmlContent = '<ul style="text-align: left; margin-top: 20px; line-height: 2; padding-left: 20px; list-style-type: none;">';
+
+        const tareas = datosSemanas[semanaName] || [];
+
+        tareas.forEach((t, i) => {
+            htmlContent += `
+                <li style="margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,126,103,0.3);">
+                    📝 <strong>Trabajo ${i + 1}:</strong> ${t.tarea} <br>
+                    <a href="${t.enlace}" target="_blank" style="display:inline-block; margin-top: 10px; padding: 6px 12px; background: #FF7E67; color: white; text-decoration: none; border-radius: 6px; font-size: 0.85em; font-weight: bold;">
+                        ${t.enlace.includes('canva') ? '🎨 Ver en Canva' : '📥 Descargar Archivo'}
+                    </a>
+                </li>`;
+        });
+
+        if (tareas.length === 0) {
+            htmlContent += '<li>Pronto se subirán los trabajos de esta semana.</li>';
+        }
+
+        htmlContent += '</ul>';
+        bodyContainer.innerHTML = htmlContent;
+
+        modal.classList.add('active');
+    }
+};

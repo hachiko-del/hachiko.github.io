@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portafolio Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo"
+                onerror="this.src='https://cdn-icons-png.flaticon.com/512/1005/1005141.png'">
+            <span class="brand-text">Portafolio</span>
+        </div>
+        <nav>
+            <a href="perfil.html" class="nav-link">Mi Perfil</a>
+            <a href="#proyectos" class="nav-link">Proyectos</a>
+            <button id="loginBtn" class="btn-login">🔑 Login Admin</button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section id="perfil" class="hero section">
+            <div class="glass-card">
+                <h1>Hola, soy <span class="highlight">CARLOS HUAMANI QUIÑONES</span></h1>
+                <p>Apasionado por crear experiencias digitales modernas y atractivas.</p>
+                <div class="skills-badges">
+                    <span class="badge">🔥 HTML5</span>
+                    <span class="badge">🎨 CSS3 / Glassmorphism</span>
+                    <span class="badge">💻 JavaScript JS</span>
+                    <span class="badge">📦 Git & GitHub</span>
+                </div>
+                <button onclick="document.getElementById('proyectos').scrollIntoView({behavior: 'smooth'})"
+                    class="btn-primary">Ver mis proyectos</button>
+            </div>
+        </section>
+
+        <section id="proyectos" class="section">
+            <h2 class="section-title">Mis Proyectos</h2>
+            <div class="projects-grid">
+                <div class="glass-card project-card" onclick="abrirTareas('Semana 1')">
+                    <div class="project-icon">🥇</div>
+                    <h3>Semana 1</h3>
+                    <p>Introducción y configuración inicial.</p>
+                </div>
+                <div class="glass-card project-card" onclick="abrirTareas('Semana 2')">
+                    <div class="project-icon">🥈</div>
+                    <h3>Semana 2</h3>
+                    <p>Bases del proyecto y estructura.</p>
+                </div>
+                <div class="glass-card project-card" onclick="abrirTareas('Semana 3')">
+                    <div class="project-icon">🥉</div>
+                    <h3>Semana 3</h3>
+                    <p>Desarrollo de las funciones principales.</p>
+                </div>
+                <div class="glass-card project-card" onclick="abrirTareas('Semana 4')">
+                    <div class="project-icon">📖</div>
+                    <h3>Semana 4</h3>
+                    <p>Integración de estilos y vista previa.</p>
+                </div>
+                <div class="glass-card project-card" onclick="abrirTareas('Semana 5')">
+                    <div class="project-icon">🚀</div>
+                    <h3>Semana 5</h3>
+                    <p>Despliegue y pruebas iniciales.</p>
+                </div>
+                <div class="glass-card project-card" onclick="abrirTareas('Semana 6')">
+                    <div class="project-icon">🛠️</div>
+                    <h3>Semana 6</h3>
+                    <p>Resolución de errores y feedback.</p>
+                </div>
+                <div class="glass-card project-card" onclick="abrirTareas('Semana 7')">
+                    <div class="project-icon">✨</div>
+                    <h3>Semana 7</h3>
+                    <p>Mejoras de rendimiento y estética.</p>
+                </div>
+                <div class="glass-card project-card" onclick="abrirTareas('Semana 8')">
+                    <div class="project-icon">🎓</div>
+                    <h3>Semana 8</h3>
+                    <p>Entrega final del proyecto completado.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Tareas -->
+    <div id="tasksModal" class="modal-overlay">
+        <div class="glass-card modal-content" style="max-width: 500px;">
+            <span class="close-btn" id="closeTasksModal">&times;</span>
+            <h2 id="tasksModalTitle">Tareas de la Semana</h2>
+            <div id="tasksModalBody">
+                <ul
+                    style="text-align: left; margin-top: 20px; line-height: 2; padding-left: 20px; list-style-type: none;">
+                    <li>📝 <strong>Tarea 1:</strong> Revisar material de lectura.</li>
+                    <li>📝 <strong>Tarea 2:</strong> Subir avance al repositorio.</li>
+                    <li>📝 <strong>Tarea 3:</strong> Participar en la evaluación.</li>
+                </ul>
+            </div>
+            <button class="btn-primary w-100" style="margin-top: 25px;"
+                onclick="document.getElementById('tasksModal').classList.remove('active')">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Botón Flotante de Sugerencias -->
+    <button id="sugerenciaFab"
+        style="position:fixed; bottom:20px; right:20px; border-radius:50%; width:60px; height:60px; font-size:24px; z-index:1000; box-shadow:0 0 15px var(--primary);"
+        class="btn-primary" title="Dejar Sugerencia">💬</button>
+
+    <!-- Modal Sugerencias -->
+    <div id="sugModal" class="modal-overlay">
+        <div class="glass-card modal-content" style="max-width: 400px;">
+            <span class="close-btn" id="closeSugModal">&times;</span>
+            <h2 style="color:var(--primary);">Dejar una Sugerencia</h2>
+            <p>Escríbeme tus recomendaciones.</p>
+            <form id="sugForm" style="margin-top: 15px;">
+                <div class="input-group">
+                    <input type="text" id="sugNombre" placeholder="Tu nombre o Alias" required>
+                </div>
+                <div class="input-group">
+                    <textarea id="sugMensaje" placeholder="Escribe tu sugerencia detallada aquí..."
+                        style="width:100%; border-radius:4px; background:rgba(0,0,0,0.4); color:white; padding:12px; border:1px solid var(--glass-border); min-height:100px; resize:none; font-family:inherit;"
+                        required></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-100">Enviar Sugerencia</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="glass-card modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h2>Acceso Administrador</h2>
+            <p>Ingresa tus credenciales para acceder al panel.</p>
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Ingresa tu ID de usuario" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Contraseña asignada" required>
+                </div>
+                <p id="errorMsg" class="error-msg">Credenciales incorrectas.</p>
+                <button type="submit" class="btn-primary w-100">Iniciar Sesión</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Background Animated Blobs -->
+    <div class="blob shape1"></div>
+    <div class="blob shape2"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

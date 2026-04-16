@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Mi Perfil - Carlos Huamani Quiñones</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .profile-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 5%;
+        }
+        .profile-card {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+        @media(min-width: 768px){
+            .profile-card {
+                flex-direction: row;
+                text-align: left;
+            }
+        }
+        .profile-image-container {
+            flex-shrink: 0;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--primary);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+            animation: pulse-border 3s infinite;
+        }
+        .profile-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-info {
+            flex-grow: 1;
+        }
+        .profile-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        .detail-item {
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--secondary);
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(56, 189, 248, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header>
+        <div class="logo-container">
+            <span class="brand-text">Portfolio.</span>
+        </div>
+        <nav>
+            <a href="index.html" class="nav-link">Volver al Inicio</a>
+            <a href="perfil.html" class="nav-link" style="color: var(--primary);">Mi Perfil</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="profile-container">
+            <div class="glass-card profile-card">
+                <div class="profile-image-container">
+                    <img src="avatar.png" alt="Avatar Animado Carlos">
+                </div>
+                <div class="profile-info">
+                    <h1>CARLOS HUAMANI QUIÑONES</h1>
+                    <div class="subtitle">💻 Desarrollador Web con Experiencia</div>
+                    <p style="margin-bottom: 20px; line-height: 1.6;">
+                        Soy un apasionado desarrollador con experiencia práctica en la creación de aplicaciones modernas y atractivas. 
+                        Me gusta resolver problemas complejos; actualmente soy estudiante universitario, en constante aprendizaje para perfeccionar mis habilidades tecnológicas.
+                    </p>
+                    
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span style="color: var(--text-muted); font-size: 0.8em; display:block;">Edad</span>
+                            <strong>21 años</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span style="color: var(--text-muted); font-size: 0.8em; display:block;">Sexo</span>
+                            <strong>Varón</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span style="color: var(--text-muted); font-size: 0.8em; display:block;">Estado</span>
+                            <strong>Estudiante Universitario</strong>
+                        </div>
+                        <div class="detail-item">
+                            <span style="color: var(--text-muted); font-size: 0.8em; display:block;">Código</span>
+                            <strong style="color: var(--primary);">S03793A</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Background Animated Blobs -->
+    <div class="blob shape1"></div>
+    <div class="blob shape2"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
